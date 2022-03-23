@@ -1,0 +1,120 @@
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - petId
+        - quantity
+        - shipDate
+      properties:
+        id:
+          type: string
+        petId:
+          type: string
+        quantity:
+          type: integer
+        status:
+          type: string
+          enum: ['placed', 'approved', 'delivered']
+        userId:
+          type: string
+        shipDate:
+          type: Date
+      example:
+        petId: 'A-long-uuid'
+        quantity: 10
+        shipDate: '2022-03-28'
+
+tags:
+  name: Orders
+  description: Order APIs
+
+paths:
+  /store/orders:
+    post:
+      summary: Place an order
+      tags: [Orders]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        200:
+          description: Place an order successfully
+        400:
+          description: Invalid request
+        500:
+          description: Some server error occured
+    get:
+      summary: Get all orders
+      tags: [Orders]
+      responses:
+        200:
+          description: Get orders successfully
+        500:
+          description: Some server error occured
+
+  /store/orders/{id}:
+    get:
+      summary: Find an order by id
+      tags: [Orders]
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+          description: Order id
+      responses:
+        200:
+          description: Get order successfully
+        404:
+          description: Not found
+        500:
+          description: Some server error occured
+
+    put:
+      summary: Update an order by id
+      tags: [Orders]
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+          description: Order id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        200:
+          description: Update order successfully
+        400:
+          description: Invalid request
+        404:
+          description: Not found
+        500:
+          description: Some server error occured
+
+    delete:
+      summary: Delete an order by id
+      tags: [Orders]
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: string
+          description: Order id
+      responses:
+        200:
+          description: Delete order successfully
+        404:
+          description: Not found
+        500:
+          description: Some server error occured

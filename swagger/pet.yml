@@ -1,0 +1,167 @@
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - name
+        - category
+        - status
+        - tag
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        status:
+          type: string
+          enum: ['available', 'pendings', 'sold']
+        tags:
+          type: array
+          items:
+            type: string
+      example:
+        name: 'Yuumi'
+        category: 'British'
+        status: 'available'
+        tags: ['long hair', 'blue eyes']
+
+tags:
+  name: Pets
+  description: Pet APIs
+
+paths:
+  /pets:
+    post:
+      summary: Create a pet
+      tags: [Pets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        200:
+          description: Pet is successfully created
+        400:
+          description: Invalid request
+        500:
+          description: Some server error occured
+    get:
+      summary: Get all pets
+      tags: [Pets]
+      responses:
+        200:
+          description: Get all pets successfully
+        500:
+          description: Some server error occured
+  /pets/{id}:
+    get:
+      summary: Get pet by id
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Pet id
+      responses:
+        200:
+          description: Get pet successfully
+        404:
+          description: Not found
+        500:
+          description: Some server error occured
+    put:
+      summary: Update pet by id
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Pet id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        200:
+          Description: Get pet by id successfully
+        400:
+          description: Invalid request
+        500:
+          Description: Some server error occurred
+    delete:
+      summary: Delete pet by id
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Pet id
+      responses:
+        200:
+          description: Delete pet by id successfully
+        404:
+          description: Not found
+        500:
+          description: Some server error occured
+
+  /pets/findByStatus?status={status}:
+    get:
+      summary: Find pet by status
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: status
+          schema:
+            type: string
+          required: true
+          description: Pet status
+      responses:
+        200:
+          description: Get pets by status successfully
+        400:
+          description: Invalid request
+        500:
+          description: Some server error occured
+
+  /pets/{id}/uploadImage:
+    post:
+      summary: Upload pet image
+      tags: [Pets]
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          descripiton: Pet id
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description: Upload pet image successfully
+        500:
+          description: Some server error occured
